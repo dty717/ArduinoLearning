@@ -1,9 +1,9 @@
 #include <SoftwareSerial.h>
 #define RX 10
 #define TX 11
-String AP = "@PHICOMM_FC";       // CHANGE ME
-String PASS = "52180362"; // CHANGE ME
-String API = "1VXGP9GVNAKAD0E7";   // CHANGE ME
+String AP = "WIFI_NAME";       // CHANGE ME
+String PASS = "WIFI_PASSWORD"; // CHANGE ME
+String API = "YOUR_API_KEY";   // CHANGE ME
 String HOST = "api.thingspeak.com";
 String PORT = "80";
 String field = "field1";
@@ -16,31 +16,19 @@ SoftwareSerial esp8266(RX,TX);
   
 void setup() {
   Serial.begin(9600);
-  esp8266.begin(9600);
-  delay(10000);
-  
+  esp8266.begin(115200);
   sendCommand("AT",5,"OK");
   sendCommand("AT+CWMODE=1",5,"OK");
   sendCommand("AT+CWJAP=\""+ AP +"\",\""+ PASS +"\"",20,"OK");
-  
-  
 }
 void loop() {
  valSensor = getSensorData();
  String getData = "GET /update?api_key="+ API +"&"+ field +"="+String(valSensor);
- if (esp8266.available()) {
-    Serial.write(esp8266.read());
-  }
-  if (Serial.available()) {
-    esp8266.write(Serial.read());
-  }
- 
  sendCommand("AT+CIPMUX=1",5,"OK");
  sendCommand("AT+CIPSTART=0,\"TCP\",\""+ HOST +"\","+ PORT,15,"OK");
  sendCommand("AT+CIPSEND=0," +String(getData.length()+4),4,">");
  esp8266.println(getData);delay(1500);countTrueCommand++;
  sendCommand("AT+CIPCLOSE=0",5,"OK");
- 
 }
 int getSensorData(){
   return random(1000); // Replace with 
