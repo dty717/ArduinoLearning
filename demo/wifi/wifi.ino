@@ -4,8 +4,8 @@
 String AP = "@PHICOMM_FC";       // CHANGE ME
 String PASS = "52180362"; // CHANGE ME
 String API = "1VXGP9GVNAKAD0E7";   // CHANGE ME
-String HOST = "api.thingspeak.com";
-String PORT = "80";
+String HOST = "192.168.2.101";
+String PORT = "8080";
 String field = "field1";
 int countTrueCommand;
 int countTimeCommand; 
@@ -27,7 +27,7 @@ void setup() {
 }
 void loop() {
  valSensor = getSensorData();
- String getData = "GET /update?api_key="+ API +"&"+ field +"="+String(valSensor);
+ String getData = "GET /test?api_key="+ API +"&"+ field +"="+String(valSensor);
  if (esp8266.available()) {
     Serial.write(esp8266.read());
   }
@@ -40,7 +40,6 @@ void loop() {
  sendCommand("AT+CIPSEND=0," +String(getData.length()+4),4,">");
  esp8266.println(getData);delay(1500);countTrueCommand++;
  sendCommand("AT+CIPCLOSE=0",5,"OK");
- 
 }
 int getSensorData(){
   return random(1000); // Replace with 

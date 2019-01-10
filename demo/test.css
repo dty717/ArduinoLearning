@@ -1,0 +1,14 @@
+.workSpace{
+    background-color: #1c94e0;
+}
+
+#fileTree>li{
+    list-style-type:none;
+    color: black;
+    margin-left: 10px;
+}
+
+#fileTree>li:hover{
+    color: #393318;
+    padding-left: 10px;
+}
