@@ -26,11 +26,18 @@ void setup() {
   Serial.begin(9600);
   // reserve 200 bytes for the inputString:
   inputString.reserve(200);
+  pinMode(7,OUTPUT); 
+  digitalWrite(7,HIGH); 
 }
 
 void loop() {
   // print the string when a newline arrives:
   if (stringComplete) {
+    if(inputString.indexOf("discharge")!=-1){
+        digitalWrite(7,HIGH); 
+    }else if(inputString.indexOf("charge")!=-1){
+        digitalWrite(7,LOW);
+    }
     Serial.println("from Arduino:"+inputString);
     // clear the string:
     inputString = "";
@@ -38,20 +45,24 @@ void loop() {
   }
 }
 
+
+
 /*
   SerialEvent occurs whenever a new data comes in the hardware serial RX. This
   routine is run between each time loop() runs, so using delay inside loop can
   delay response. Multiple bytes of data may be available.
 */
+bool a=true;
 void serialEvent() {
-  while (Serial.available()) {
+  while(Serial.available()) {
+
     // get the new byte:
     char inChar = (char)Serial.read();
     // if the incoming character is a newline, set a flag so the main loop can
     // do something about it:
     if (inChar == '\n') {
-      if(inputString.length()>0&&inputString.charAt(inputString.length()-1)=='\r'){
-        inputString=inputString.substring(0,inputString.length()-1);
+      if(inputString.length()>0){
+        //inputString=inputString.substring(0,inputString.length());
       }
       stringComplete = true;
     }else{
